@@ -3,7 +3,7 @@
 #include "main.h"
 #include "robot_config.h"
 #include "autonomous.h"
-#include "auton_replay.h"
+#include "position_replay.h"
 #include "subsystems/intake.h"
 #include "subsystems/outtake.h"
 #include "subsystems/pneumatics.h"
@@ -12,9 +12,9 @@ void initialize() {
     initializeRobot();
     
     // Try to load any existing recording from SD card
-    if (autonReplay.loadFromSD()) {
+    if (positionReplay.loadFromSD()) {
         pros::screen::set_pen(pros::c::COLOR_GREEN);
-        pros::screen::print(pros::E_TEXT_MEDIUM, 10, 100, "Recording loaded from SD!");
+        pros::screen::print(pros::E_TEXT_MEDIUM, 10, 100, "Position recording loaded!");
     }
     
     drawReplayMenu();
@@ -25,8 +25,8 @@ void disabled() {}
 void competition_initialize() {}
 
 void autonomous() {
-    // Play back the recorded autonomous
-    autonReplay.playback();
+    // Play back the recorded position-based autonomous
+    positionReplay.playback();
 }
 
 // Small deadband to prevent drift (applies to values close to 0)
@@ -41,7 +41,7 @@ void drawReplayMenu() {
     
     // Title
     pros::screen::set_pen(pros::c::COLOR_WHITE);
-    pros::screen::print(pros::E_TEXT_LARGE, 120, 10, "AUTON RECORDER");
+    pros::screen::print(pros::E_TEXT_LARGE, 100, 10, "POSITION RECORDER");
     
     // Draw buttons
     // Record button (left side)
@@ -62,11 +62,11 @@ void drawReplayMenu() {
     
     // Show recording info
     pros::screen::set_pen(pros::c::COLOR_WHITE);
-    if (autonReplay.getFrameCount() > 0) {
-        uint32_t duration = autonReplay.getDuration();
+    if (positionReplay.getFrameCount() > 0) {
+        uint32_t duration = positionReplay.getDuration();
         pros::screen::print(pros::E_TEXT_MEDIUM, 30, 175, 
-            "Recording: %d frames (%.1f sec)", 
-            autonReplay.getFrameCount(), 
+            "Recording: %d waypoints (%.1f sec)", 
+            positionReplay.getFrameCount(), 
             duration / 1000.0f);
     } else {
         pros::screen::print(pros::E_TEXT_MEDIUM, 30, 175, "No recording loaded");
@@ -89,8 +89,8 @@ void handleMenuTouch() {
         if (y >= 60 && y <= 140) {
             // Record button
             if (x >= 20 && x <= 220) {
-                if (!autonReplay.isRecording()) {
-                    autonReplay.startRecording();
+                if (!positionReplay.isRecording()) {
+                    positionReplay.startRecording();
                     
                     // Change button to STOP
                     pros::screen::set_pen(pros::c::COLOR_ORANGE);
@@ -98,13 +98,13 @@ void handleMenuTouch() {
                     pros::screen::set_pen(pros::c::COLOR_WHITE);
                     pros::screen::print(pros::E_TEXT_LARGE, 80, 90, "STOP");
                 } else {
-                    autonReplay.stopRecording(true);  // Save to SD
+                    positionReplay.stopRecording(true);  // Save to SD
                     drawReplayMenu();  // Redraw menu
                 }
             }
             // Play button
-            else if (x >= 260 && x <= 460 && !autonReplay.isRecording()) {
-                autonReplay.playback();
+            else if (x >= 260 && x <= 460 && !positionReplay.isRecording()) {
+                positionReplay.playback();
                 drawReplayMenu();  // Redraw after playback
             }
         }
@@ -134,12 +134,12 @@ void opcontrol() {
         pneumatics.update();
         
         // Record frame if recording is active
-        autonReplay.recordFrame();
+        positionReplay.recordFrame();
         
         // Controller shortcut: UP to start recording, DOWN to stop
         if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
-            if (!autonReplay.isRecording()) {
-                autonReplay.startRecording();
+            if (!positionReplay.isRecording()) {
+                positionReplay.startRecording();
                 
                 // Update screen
                 pros::screen::set_pen(pros::c::COLOR_ORANGE);
@@ -150,16 +150,16 @@ void opcontrol() {
         }
         
         if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-            if (autonReplay.isRecording()) {
-                autonReplay.stopRecording(true);
+            if (positionReplay.isRecording()) {
+                positionReplay.stopRecording(true);
                 drawReplayMenu();
             }
         }
         
         // LEFT button to test playback
         if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-            if (!autonReplay.isRecording() && !autonReplay.isPlaying()) {
-                autonReplay.playback();
+            if (!positionReplay.isRecording() && !positionReplay.isPlaying()) {
+                positionReplay.playback();
                 drawReplayMenu();
             }
         }

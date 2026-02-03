@@ -14,7 +14,8 @@
         "c:\\Users\\IJiae\\Downloads\\Main-Drive-main\\include",
         "d:\\The Documents\\Coding\\Drive\\Main-Drive\\include",
         "c:\\Users\\IJiae\\Downloads\\Main-Drive\\include",
-        "c:\\Users\\IJiae\\Downloads\\Auton-Replayer\\include"
+        "c:\\Users\\IJiae\\Downloads\\Auton-Replayer\\include",
+        "c:\\Users\\IJiae\\Downloads\\Auton-Replayer - Uses Lemlib Positions\\include"
       ],
       "defines": [
         "_DEBUG",
@@ -27,7 +28,7 @@
       "intelliSenseMode": "gcc-arm",
       "browse": {
         "path": [
-          "c:\\Users\\IJiae\\Downloads\\Auton-Replayer"
+          "c:\\Users\\IJiae\\Downloads\\Auton-Replayer - Uses Lemlib Positions"
         ],
         "limitSymbolsToIncludedHeaders": true,
         "databaseFilename": ""

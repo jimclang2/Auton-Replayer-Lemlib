@@ -1,96 +1,121 @@
-# VEX V5 Auton Replayer (PROS)
+# VEX V5 Position-Based Auton Recorder
 
-Record your driver movements during practice and replay them during autonomous! Simply drive your route, and the robot will repeat it exactly.
+**Record driver movements → Replay with LemLib's self-correcting motion control**
 
-## Features
-
-- **Record & Replay** - Drive your autonomous route manually, replay it perfectly
-- **Motor Velocity Recording** - Captures exact motor speeds, not just on/off states
-- **IMU Drift Correction** - Automatically corrects heading drift during playback
-- **SD Card Persistence** - Recordings survive power cycles
-- **Touch Screen UI** - Easy record/play buttons on Brain screen
-- **Microsecond Precision** - Accurate timing for consistent replays
-- **Emergency Stop** - Press Left + Right arrows to abort playback
+Uses LemLib's odometry to record (X, Y, Heading) positions instead of raw motor values, resulting in more robust and accurate autonomous playback.
 
 ---
 
-## Quick Start Guide
+## 🚀 Quick Start
 
-### 1. Setup
-```
-1. Upload this program to the Brain
-2. Insert SD card into Brain (leave it there forever)
-3. Run the program (normal "Run" on brain)
-```
-
-> **Note:** You can now DRIVE normally! The controller works just like usual.
-
-### 2. Record Your Autonomous
-
+### Recording
 | Method | Action |
 |--------|--------|
-| **Brain Screen** | Touch `RECORD` → Drive → Touch `STOP` |
-| **Controller** | Press `UP` → Drive → Press `DOWN` |
+| **Screen** | Tap `RECORD` → Drive → Tap `STOP` |
+| **Controller** | `UP` → Drive → `DOWN` |
 
-A 3-second countdown will appear before recording starts. Recording is automatically saved to SD card!
-
-### 3. Test Your Recording
-
+### Playback  
 | Method | Action |
 |--------|--------|
-| **Brain Screen** | Touch `PLAY` |
-| **Controller** | Press `LEFT` |
+| **Screen** | Tap `PLAY` |
+| **Controller** | `LEFT` |
 
-The robot will replay exactly what you drove!
-
-### 4. At Competition
-
-When autonomous period starts, it automatically plays your recorded route.
-> The `autonomous()` function calls `autonReplay.playback()`
+### Emergency Stop
+Press `LEFT + RIGHT` arrows simultaneously during playback.
 
 ---
 
-## Controller Button Map
+## ✨ Features
+
+| Feature | Description |
+|---------|-------------|
+| **Position Recording** | Captures (X, Y, θ) at 20 samples/sec |
+| **Self-Correcting** | LemLib's closed-loop motion control |
+| **Mechanism Actions** | Records intake, outtake, pneumatics |
+| **SD Card Storage** | Recordings persist across power cycles |
+| **Compact Files** | ~6KB per minute of recording |
+
+---
+
+## 🎮 Controller Buttons
 
 | Button | Function |
 |--------|----------|
 | `UP` | Start recording |
-| `DOWN` | Stop recording (saves to SD) |
+| `DOWN` | Stop recording (auto-saves) |
 | `LEFT` | Test playback |
-| `LEFT + RIGHT` | Emergency stop during playback |
+| `LEFT + RIGHT` | Emergency stop |
 
 ---
 
-## Tips for Best Results
+## 💡 Tips for Best Results
 
-1. **Start in the same position** - Place robot identically each time
-2. **Wait for IMU calibration** - Let robot sit still for 2-3 seconds on startup
-3. **Drive smoothly** - Jerky movements may not replay as well
-4. **Keep recordings short** - Longer recordings accumulate more drift
-5. **Test before competition** - Always verify playback works as expected
+1. **Same starting position** - Place robot identically each time
+2. **Wait for IMU** - Let robot sit 2-3 seconds on startup
+3. **Smooth driving** - Consistent movements replay best
+4. **Check odometry** - Ensure tracking wheel works correctly
+5. **Test first** - Always verify before competition
 
 ---
 
-## Customization
+## ⚙️ Configuration
 
 ```cpp
-// In your code, you can customize:
-autonReplay.setCountdownDuration(5000);  // 5 second countdown (default: 3000)
-autonReplay.setCountdownDuration(0);     // No countdown
-autonReplay.setIMUCorrectionGain(3.0f);  // More aggressive drift correction (default: 2.0)
+// Customize in your code:
+positionReplay.setRecordingInterval(25);       // Even faster: 40 samples/sec
+positionReplay.setCountdownDuration(5000);     // 5 second countdown
+positionReplay.setActionTriggerRadius(5.0f);   // Trigger radius in inches
 ```
 
 ---
 
-## Technical Details
+## 📊 Technical Specs
 
-- **Recording Format:** Binary file at `/usd/auton_recording.bin`
-- **Sample Rate:** 50Hz (every 20ms)
-- **Max Duration:** ~5 minutes (15000 frames)
-- **Data Captured:** Joystick values, motor velocities, button states, IMU heading, timestamps (microseconds)
+| Spec | Value |
+|------|-------|
+| Sample Rate | 40 Hz (25ms intervals) |
+| File Location | `/usd/position_recording.bin` |
+| Max Recording | ~5+ minutes |
+| Data Per Frame | X, Y, θ, motors, buttons, timestamp |
+| Playback Method | `chassis.moveToPose()` |
 
 ---
 
-## License
+## 🔧 How It Works
 
-Apache-2.0 - Based on concepts from [Skyluker4/VEX-V5-Replay](https://github.com/Skyluker4/VEX-V5-Replay)
+### Recording
+```
+1. Resets odometry to (0, 0, 0)
+2. Every 50ms: captures chassis.getPose()
+3. Records motor powers & button states
+4. Marks frames with mechanism actions
+```
+
+### Playback (Hybrid Mode)
+```
+For each waypoint:
+  → If distance > 1": moveToPose(x, y, θ)
+  → If only heading differs: turnToHeading(θ)  
+  → If action frame: execute motors/pneumatics
+```
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+├── position_replay.cpp   ← Recording & playback logic
+├── main.cpp              ← UI and control loop
+└── ...
+
+include/
+├── position_replay.h     ← WaypointFrame struct & class
+└── ...
+```
+
+---
+
+## 📜 License
+
+Apache-2.0
