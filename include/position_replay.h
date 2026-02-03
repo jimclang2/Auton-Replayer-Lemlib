@@ -11,11 +11,13 @@
  */
 
 // Single waypoint frame - captures position and mechanism states at a moment in time
+// Packed to ensure consistent binary layout across compiler versions (Risk #3 fix)
+#pragma pack(push, 1)
 struct WaypointFrame {
     // Position data from chassis.getPose()
     float x;            // X position in inches
     float y;            // Y position in inches  
-    float theta;        // Heading in degrees
+    float theta;        // Heading in degrees (LemLib returns degrees)
     
     // Timing
     uint64_t timestamp; // Time since recording started (microseconds)
@@ -37,8 +39,9 @@ struct WaypointFrame {
     // Flag to indicate if mechanism action occurred at this waypoint
     bool hasAction;     // True if any mechanism was activated at this frame
 };
+#pragma pack(pop)
 
-// Button bit positions (same as old system for compatibility)
+// Button bit positions
 constexpr uint8_t BTN_R1 = 0;
 constexpr uint8_t BTN_R2 = 1;
 constexpr uint8_t BTN_L1 = 2;
@@ -60,6 +63,10 @@ private:
     
     // Previous button states for edge detection
     uint8_t prevButtons = 0;
+    uint8_t lastPlaybackButtons = 0;  // For edge detection during playback
+    
+    // Task priority tracking (Bug #2 fix)
+    int originalPriority = TASK_PRIORITY_DEFAULT;
     
     // Configuration
     uint32_t recordingInterval = 25;        // Recording interval in ms (25ms = 40 samples/sec)
@@ -132,7 +139,12 @@ public:
     
     // ==================== Getters/Setters ====================
     
-    int getFrameCount() const { return recording.size(); }
+    size_t getFrameCount() const { return recording.size(); }
+    static constexpr size_t MAX_FRAMES = 5000;
+    
+    // Helper to find frame index for a given timestamp
+    size_t findFrameIndexAtTime(uint64_t elapsedMicros);
+
     uint32_t getDuration() const;
     bool isRecording() const { return _isRecording; }
     bool isPlaying() const { return _isPlaying; }

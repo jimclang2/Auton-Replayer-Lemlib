@@ -20,7 +20,15 @@ void initialize() {
     drawReplayMenu();
 }
 
-void disabled() {}
+void disabled() {
+    // Bug #3 fix: Safely stop recording/playback when robot is disabled
+    if (positionReplay.isRecording()) {
+        positionReplay.stopRecording(true);  // Save what we have
+    }
+    if (positionReplay.isPlaying()) {
+        positionReplay.abortPlayback();
+    }
+}
 
 void competition_initialize() {}
 

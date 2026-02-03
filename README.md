@@ -1,8 +1,28 @@
 # VEX V5 Position-Based Auton Recorder
 
-**Record driver movements → Replay with LemLib's self-correcting motion control**
+**Record driver movements → Replay with time-synced Pure Pursuit**
 
-Uses LemLib's odometry to record (X, Y, Heading) positions instead of raw motor values, resulting in more robust and accurate autonomous playback.
+Uses LemLib's odometry to record (X, Y, Heading) positions and replays them with a custom pursuit controller for smooth, accurate autonomous playback.
+
+---
+
+## ⚠️ IMPORTANT: Tune PID Before Use
+
+The playback uses a P controller for path following. **You must tune these values for your robot:**
+
+📍 **Location:** `src/position_replay.cpp` → Lines 316-317 (inside `playback()`)
+
+```cpp
+float kP_forward = 8.0f;   // Higher = more aggressive pursuit (try 5-15)
+float kP_turn = 2.0f;      // Higher = faster heading correction (try 1-5)
+```
+
+| Symptom | Fix |
+|---------|-----|
+| Robot overshoots/oscillates | Lower both values |
+| Robot drifts off path | Increase `kP_forward` |
+| Robot slow to turn | Increase `kP_turn` |
+| Robot too aggressive | Lower both values by 50% |
 
 ---
 
@@ -29,8 +49,9 @@ Press `LEFT + RIGHT` arrows simultaneously during playback.
 
 | Feature | Description |
 |---------|-------------|
-| **Position Recording** | Captures (X, Y, θ) at 20 samples/sec |
-| **Self-Correcting** | LemLib's closed-loop motion control |
+| **Position Recording** | Captures (X, Y, θ) at 40 samples/sec |
+| **Time-Synced Playback** | Matches recording timing exactly |
+| **Custom Pure Pursuit** | Smooth path following with P controller |
 | **Mechanism Actions** | Records intake, outtake, pneumatics |
 | **SD Card Storage** | Recordings persist across power cycles |
 | **Compact Files** | ~6KB per minute of recording |
@@ -62,7 +83,7 @@ Press `LEFT + RIGHT` arrows simultaneously during playback.
 
 ```cpp
 // Customize in your code:
-positionReplay.setRecordingInterval(25);       // Even faster: 40 samples/sec
+positionReplay.setRecordingInterval(25);       // 40 samples/sec (default)
 positionReplay.setCountdownDuration(5000);     // 5 second countdown
 positionReplay.setActionTriggerRadius(5.0f);   // Trigger radius in inches
 ```
@@ -75,9 +96,9 @@ positionReplay.setActionTriggerRadius(5.0f);   // Trigger radius in inches
 |------|-------|
 | Sample Rate | 40 Hz (25ms intervals) |
 | File Location | `/usd/position_recording.bin` |
-| Max Recording | ~5+ minutes |
+| Max Recording | ~2 minutes (5000 frames) |
 | Data Per Frame | X, Y, θ, motors, buttons, timestamp |
-| Playback Method | `chassis.moveToPose()` |
+| Playback Method | Time-synced P controller pursuit |
 
 ---
 
@@ -86,17 +107,19 @@ positionReplay.setActionTriggerRadius(5.0f);   // Trigger radius in inches
 ### Recording
 ```
 1. Resets odometry to (0, 0, 0)
-2. Every 50ms: captures chassis.getPose()
+2. Every 25ms: captures chassis.getPose()
 3. Records motor powers & button states
-4. Marks frames with mechanism actions
+4. Saves to SD card on stop
 ```
 
-### Playback (Hybrid Mode)
+### Playback (Time-Synced Pursuit)
 ```
-For each waypoint:
-  → If distance > 1": moveToPose(x, y, θ)
-  → If only heading differs: turnToHeading(θ)  
-  → If action frame: execute motors/pneumatics
+Start timer
+Loop every 20ms:
+  → Find frame matching elapsed time (binary search)
+  → Calculate distance/heading error to target
+  → Apply P controller: motors = error × kP
+  → Apply intake/outtake/pneumatics from frame
 ```
 
 ---

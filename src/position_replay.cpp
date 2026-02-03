@@ -57,6 +57,24 @@ void PositionReplay::abortPlayback() {
     _abortRequested = true;
 }
 
+size_t PositionReplay::findFrameIndexAtTime(uint64_t elapsedMicros) {
+    if (recording.empty()) return 0;
+    if (elapsedMicros >= recording.back().timestamp) 
+        return recording.size() - 1;
+    
+    // Binary search
+    size_t lo = 0, hi = recording.size() - 1;
+    while (lo < hi) {
+        size_t mid = lo + (hi - lo) / 2;
+        if (recording[mid].timestamp < elapsedMicros) {
+            lo = mid + 1;
+        } else {
+            hi = mid;
+        }
+    }
+    return lo;
+}
+
 // ==================== Recording ====================
 
 void PositionReplay::startRecording() {
@@ -95,8 +113,7 @@ void PositionReplay::startRecording() {
     _isRecording = true;
     prevButtons = 0;
     
-    // Boost task priority for consistent timing
-    pros::Task::current().set_priority(TASK_PRIORITY_MAX - 1);
+    // Removed task priority manipulation to avoid starvation risks
     
     master.print(0, 0, "RECORDING (POS)... ");
     master.rumble("-");
@@ -107,8 +124,7 @@ void PositionReplay::startRecording() {
 void PositionReplay::stopRecording(bool saveToSD) {
     _isRecording = false;
     
-    // Restore normal priority
-    pros::Task::current().set_priority(TASK_PRIORITY_DEFAULT);
+    // Removed task priority restoration
     
     master.print(0, 0, "STOPPED: %d pts   ", recording.size());
     master.rumble(".");
@@ -133,8 +149,8 @@ void PositionReplay::recordFrame() {
     uint64_t currentTime = pros::micros() - recordStartTime;
     uint64_t currentTimeMs = currentTime / 1000;
     
-    // Only record at configured interval (default 100ms)
-    if (currentTimeMs - (lastRecordTime / 1000) < recordingInterval) {
+    // Only record at configured interval (Risk #1 fix: compare in microseconds for precision)
+    if ((currentTime - lastRecordTime) / 1000 < recordingInterval) {
         return;
     }
     
@@ -180,14 +196,13 @@ void PositionReplay::recordFrame() {
     
     prevButtons = currentButtons;
     
-    // Safe push_back
-    try {
-        recording.push_back(frame);
-    } catch (...) {
-        master.print(0, 0, "MEMORY FULL!       ");
+    // Safe push_back with hard limit
+    if (recording.size() >= MAX_FRAMES) {
+        master.print(0, 0, "MAX FRAMES REACHED!");
         stopRecording(true);
         return;
     }
+    recording.push_back(frame);
     
     // Blink indicator
     uint32_t elapsedSec = currentTimeMs / 500;
@@ -207,7 +222,7 @@ void PositionReplay::executeActions(const WaypointFrame& frame, bool& midScoring
     Outtake.move(frame.outtakePower);
     
     // Handle pneumatic toggles with edge detection
-    static uint8_t lastPlaybackButtons = 0;
+    // Note: lastPlaybackButtons is now a class member, reset at playback start
     
     if (wasPressed(frame.buttons, lastPlaybackButtons, BTN_X)) {
         midScoring = !midScoring;
@@ -226,6 +241,13 @@ void PositionReplay::executeActions(const WaypointFrame& frame, bool& midScoring
 }
 
 void PositionReplay::playback() {
+    // Prevent starting playback while recording
+    if (_isRecording) {
+        master.print(0, 0, "STOP REC FIRST!    ");
+        master.rumble("---");
+        return;
+    }
+    
     if (recording.empty()) {
         if (!loadFromSD()) {
             master.print(0, 0, "NO RECORDING!      ");
@@ -236,17 +258,19 @@ void PositionReplay::playback() {
     _isPlaying = true;
     _abortRequested = false;
     
-    // Pneumatic states
-    bool midScoring = false;
-    bool descore = false;
-    bool unloader = false;
+    // Initial pneumatic states match physical defaults
+    bool midScoring = true;   // Extended by default
+    bool descore = false;     // Retracted by default
+    bool unloader = false;    // Retracted by default
     
-    // Reset pose to starting position (should be 0,0,0)
+    // Reset pistons to known starting positions
+    MidScoring.set_value(midScoring);
+    Descore.set_value(descore);
+    Unloader.set_value(unloader);
+    
+    // Reset pose to starting position
     chassis.setPose(0, 0, 0);
     pros::delay(50);
-    
-    // Boost priority
-    pros::Task::current().set_priority(TASK_PRIORITY_MAX - 1);
     
     master.print(0, 0, "REPLAYING (<>=STOP)");
     
@@ -254,56 +278,93 @@ void PositionReplay::playback() {
     pros::screen::set_pen(pros::c::COLOR_GREEN);
     pros::screen::fill_circle(460, 20, 15);
     
-    size_t frameIndex = 0;
-    size_t actionFrameIndex = 0;  // Track which action frames we've processed
+    // Reset static button state
+    lastPlaybackButtons = 0;
     
-    // Find waypoints that have actions (we'll pause at these)
-    std::vector<size_t> actionFrames;
-    for (size_t i = 0; i < recording.size(); i++) {
-        if (recording[i].hasAction) {
-            actionFrames.push_back(i);
-        }
-    }
+    uint64_t startTime = pros::micros();
+    // Use last frame's timestamp as total duration
+    uint64_t totalDuration = recording.back().timestamp;
     
-    // Main playback loop - move through waypoints
-    while (frameIndex < recording.size()) {
-        // Emergency stop check
-        if (checkEmergencyStop() || _abortRequested) {
-            master.print(0, 0, "PLAYBACK ABORTED!  ");
-            master.rumble("--");
-            break;
-        }
+    // ===== TIME-SYNCED PURSUIT LOOP =====
+    while (!_abortRequested && !checkEmergencyStop()) {
+        uint64_t elapsed = pros::micros() - startTime;
+        if (elapsed >= totalDuration) break;
         
-        WaypointFrame& target = recording[frameIndex];
+        // Find target frame based on elapsed time
+        size_t idx = findFrameIndexAtTime(elapsed);
+        const WaypointFrame& target = recording[idx];
         
-        // Use moveToPose for smooth motion to next waypoint
-        // Use async=false to wait for completion, with a reasonable timeout
-        int timeout = 1500;  // Max 1.5 second per waypoint
+        // --- CUSTOM LIGHTWEIGHT PURE PURSUIT ---
+        // We act like a pursuit controller following the moving target point
         
-        // Calculate distance to determine if we should move or just turn
-        lemlib::Pose currentPose = chassis.getPose();
-        float dx = target.x - currentPose.x;
-        float dy = target.y - currentPose.y;
+        lemlib::Pose current = chassis.getPose();
+        float dx = target.x - current.x;
+        float dy = target.y - current.y;
         float distance = std::sqrt(dx*dx + dy*dy);
         
-        if (distance > 1.0f) {
-            // Move to the waypoint position with target heading
-            chassis.moveToPose(target.x, target.y, target.theta, timeout, {}, false);
-        } else if (std::abs(target.theta - currentPose.theta) > 5.0f) {
-            // Just turn if we're already at position but wrong heading
-            chassis.turnToHeading(target.theta, 500, {}, false);
+        // Calculate desired heading toward target
+        // atan2 returns radians, convert to degrees
+        float targetHeading = std::atan2(dy, dx) * 180.0f / M_PI;
+        
+        // Heading error wrapping
+        float headingError = targetHeading - current.theta;
+        while (headingError > 180) headingError -= 360;
+        while (headingError < -180) headingError += 360;
+        
+        // Simple P controller for Arcade Drive
+        // Tune these constants if tracking is too loose or oscillates
+        float kP_forward = 8.0f;
+        float kP_turn = 2.0f;
+        
+        float forward = distance * kP_forward;
+        float turn = headingError * kP_turn;
+        
+        // Clamp output
+        if (forward > 127) forward = 127;
+        if (forward < -127) forward = -127;
+        if (turn > 127) turn = 127;
+        if (turn < -127) turn = -127;
+        
+        // Special case: If we are extremely close to the point (within 0.5 inch),
+        // we might just want to match the recorded heading instead of driving to the point
+        if (distance < 0.5f) {
+            forward = 0;
+            float thetaError = target.theta - current.theta;
+            while (thetaError > 180) thetaError -= 360;
+            while (thetaError < -180) thetaError += 360;
+            turn = thetaError * kP_turn; // Use same turn KP for simplicity
+            
+            if (turn > 127) turn = 127;
+            if (turn < -127) turn = -127;
         }
         
-        // Check if this is an action frame - if so, execute actions
-        if (target.hasAction) {
-            executeActions(target, midScoring, descore, unloader);
-            // Brief pause for mechanism action to complete
-            pros::delay(50);
-        }
+        // Apply drive power (Arcade: left = fwd + turn, right = fwd - turn)
+        left_motors.move(forward + turn);
+        right_motors.move(forward - turn);
         
-        // Continue applying motor powers between waypoints
+        // --- APPLY MECHANISM STATES ---
+        // Direct application from recorded frame
         Intake.move(target.intakePower);
         Outtake.move(target.outtakePower);
+        
+        // Pneumatic toggles with edge detection
+        // Note: We use the helper logic inline here or call executeActions if preferred. 
+        // Inline is clearer for this loop structure.
+        
+        if (wasPressed(target.buttons, lastPlaybackButtons, BTN_X)) {
+            midScoring = !midScoring;
+            MidScoring.set_value(midScoring);
+        }
+        if (wasPressed(target.buttons, lastPlaybackButtons, BTN_A)) {
+            descore = !descore;
+            Descore.set_value(descore);
+        }
+        if (wasPressed(target.buttons, lastPlaybackButtons, BTN_B)) {
+            unloader = !unloader;
+            Unloader.set_value(unloader);
+        }
+        
+        lastPlaybackButtons = target.buttons;
         
         // Blink indicator
         uint32_t currentMs = pros::millis();
@@ -314,7 +375,7 @@ void PositionReplay::playback() {
         }
         pros::screen::fill_circle(460, 20, 15);
         
-        frameIndex++;
+        pros::delay(20);
     }
     
     // Stop all motors
@@ -323,13 +384,14 @@ void PositionReplay::playback() {
     Intake.move(0);
     Outtake.move(0);
     
-    // Restore priority
-    pros::Task::current().set_priority(TASK_PRIORITY_DEFAULT);
-    
     _isPlaying = false;
     _abortRequested = false;
     
-    master.print(0, 0, "REPLAY COMPLETE!   ");
+    if (pros::competition::is_disabled()) {
+         master.print(0, 0, "GAME DISABLED!     ");
+    } else {
+         master.print(0, 0, "REPLAY COMPLETE!   ");
+    }
     
     // Clear indicator
     pros::screen::set_pen(pros::c::COLOR_BLACK);
