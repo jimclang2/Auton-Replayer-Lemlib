@@ -278,8 +278,10 @@ void PositionReplay::playback() {
     pros::screen::set_pen(pros::c::COLOR_GREEN);
     pros::screen::fill_circle(460, 20, 15);
     
-    // Reset static button state
+    // Reset state for playback
     lastPlaybackButtons = 0;
+    prevDistanceError = 0;
+    prevHeadingError = 0;
     
     uint64_t startTime = pros::micros();
     // Use last frame's timestamp as total duration
@@ -311,13 +313,24 @@ void PositionReplay::playback() {
         while (headingError > 180) headingError -= 360;
         while (headingError < -180) headingError += 360;
         
-        // Simple P controller for Arcade Drive
-        // Tune these constants if tracking is too loose or oscillates
-        float kP_forward = 8.0f;
-        float kP_turn = 2.0f;
+        // PD controller using pre-tuned LemLib values
+        // Lateral (forward): kP=4.25, kD=1.0
+        // Angular (turn): kP=0.863, kD=0.235
+        float kP_forward = 4.25f;
+        float kD_forward = 1.0f;
+        float kP_turn = 0.863f;
+        float kD_turn = 0.235f;
         
-        float forward = distance * kP_forward;
-        float turn = headingError * kP_turn;
+        // Calculate derivative terms
+        float distanceDerivative = distance - prevDistanceError;
+        float headingDerivative = headingError - prevHeadingError;
+        
+        float forward = distance * kP_forward + distanceDerivative * kD_forward;
+        float turn = headingError * kP_turn + headingDerivative * kD_turn;
+        
+        // Update previous errors for next iteration
+        prevDistanceError = distance;
+        prevHeadingError = headingError;
         
         // Clamp output
         if (forward > 127) forward = 127;
@@ -326,13 +339,17 @@ void PositionReplay::playback() {
         if (turn < -127) turn = -127;
         
         // Special case: If we are extremely close to the point (within 0.5 inch),
-        // we might just want to match the recorded heading instead of driving to the point
+        // match the recorded heading instead of driving to the point
         if (distance < 0.5f) {
             forward = 0;
             float thetaError = target.theta - current.theta;
             while (thetaError > 180) thetaError -= 360;
             while (thetaError < -180) thetaError += 360;
-            turn = thetaError * kP_turn; // Use same turn KP for simplicity
+            
+            // Use same PD values for heading correction
+            float thetaDerivative = thetaError - prevHeadingError;
+            turn = thetaError * kP_turn + thetaDerivative * kD_turn;
+            prevHeadingError = thetaError;
             
             if (turn > 127) turn = 127;
             if (turn < -127) turn = -127;

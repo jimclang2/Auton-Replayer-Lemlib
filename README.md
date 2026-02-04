@@ -6,23 +6,28 @@ Uses LemLib's odometry to record (X, Y, Heading) positions and replays them with
 
 ---
 
-## ⚠️ IMPORTANT: Tune PID Before Use
+## ⚙️ PID Configuration
 
-The playback uses a P controller for path following. **You must tune these values for your robot:**
+The playback uses a **PD controller** (Proportional + Derivative) for smooth path following.
 
-📍 **Location:** `src/position_replay.cpp` → Lines 316-317 (inside `playback()`)
+📍 **Location:** `src/position_replay.cpp` → inside `playback()`
 
 ```cpp
-float kP_forward = 8.0f;   // Higher = more aggressive pursuit (try 5-15)
-float kP_turn = 2.0f;      // Higher = faster heading correction (try 1-5)
+// Match these to your LemLib lateral/angular PID settings
+float kP_forward = 4.25f;   // Lateral kP
+float kD_forward = 1.0f;    // Lateral kD
+float kP_turn = 0.863f;     // Angular kP
+float kD_turn = 0.235f;     // Angular kD
 ```
+
+💡 **Tip:** Use the same values from your LemLib `lateral_controller` and `angular_controller` for consistent behavior.
 
 | Symptom | Fix |
 |---------|-----|
-| Robot overshoots/oscillates | Lower both values |
+| Robot overshoots/oscillates | Increase kD values |
 | Robot drifts off path | Increase `kP_forward` |
 | Robot slow to turn | Increase `kP_turn` |
-| Robot too aggressive | Lower both values by 50% |
+| Too aggressive/jerky | Lower kP values |
 
 ---
 
@@ -51,7 +56,7 @@ Press `LEFT + RIGHT` arrows simultaneously during playback.
 |---------|-------------|
 | **Position Recording** | Captures (X, Y, θ) at 40 samples/sec |
 | **Time-Synced Playback** | Matches recording timing exactly |
-| **Custom Pure Pursuit** | Smooth path following with P controller |
+| **Custom Pure Pursuit** | Smooth path following with PD controller |
 | **Mechanism Actions** | Records intake, outtake, pneumatics |
 | **SD Card Storage** | Recordings persist across power cycles |
 | **Compact Files** | ~6KB per minute of recording |
@@ -98,7 +103,7 @@ positionReplay.setActionTriggerRadius(5.0f);   // Trigger radius in inches
 | File Location | `/usd/position_recording.bin` |
 | Max Recording | ~2 minutes (5000 frames) |
 | Data Per Frame | X, Y, θ, motors, buttons, timestamp |
-| Playback Method | Time-synced P controller pursuit |
+| Playback Method | Time-synced PD controller pursuit |
 
 ---
 
@@ -118,7 +123,7 @@ Start timer
 Loop every 20ms:
   → Find frame matching elapsed time (binary search)
   → Calculate distance/heading error to target
-  → Apply P controller: motors = error × kP
+  → Apply PD controller: motors = error × kP + Δerror × kD
   → Apply intake/outtake/pneumatics from frame
 ```
 

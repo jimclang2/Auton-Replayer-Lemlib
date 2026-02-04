@@ -65,6 +65,10 @@ private:
     uint8_t prevButtons = 0;
     uint8_t lastPlaybackButtons = 0;  // For edge detection during playback
     
+    // Previous errors for PID derivative term
+    float prevDistanceError = 0;
+    float prevHeadingError = 0;
+    
     // Task priority tracking (Bug #2 fix)
     int originalPriority = TASK_PRIORITY_DEFAULT;
     
