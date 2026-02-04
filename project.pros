@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "Main Drive",
+    "project_name": "Auton Replayer",
     "target": "v5",
     "templates": {
       "LemLib": {
@@ -635,10 +635,10 @@
       }
     },
     "upload_options": {
-      "slot": 1,
-      "icon": "ufo",
+      "slot": 2,
+      "icon": "power",
       "description": "Includes All Autons + Regular Drive",
-      "after": "run"
+      "after": "screen"
     },
     "use_early_access": false
   }
