@@ -1,8 +1,9 @@
-#include "lemlib/api.hpp"
+#include "lemlib/api.hpp" // IWYU pragma: keep
+#include <string> // IWYU pragma: keep
 #include "pros/rtos.hpp"
 #include "main.h"
 #include "robot_config.h"
-#include "autonomous.h"
+#include "autonomous.h" // IWYU pragma: keep
 #include "position_replay.h"
 #include "subsystems/intake.h"
 #include "subsystems/outtake.h"
