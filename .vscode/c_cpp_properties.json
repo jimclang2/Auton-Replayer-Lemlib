@@ -16,20 +16,21 @@
         "c:\\Users\\IJiae\\Downloads\\Main-Drive\\include",
         "c:\\Users\\IJiae\\Downloads\\Auton-Replayer\\include",
         "c:\\Users\\IJiae\\Downloads\\Auton-Replayer - Uses Lemlib Positions\\include",
-        "c:\\Users\\admin\\Documents\\Auton-Replayer-Lemlib\\include"
+        "c:\\Users\\admin\\Documents\\Auton-Replayer-Lemlib\\include",
+        "c:\\Users\\JimArnold\\Documents\\GitHub\\Auton-Replayer-Lemlib\\include"
       ],
       "defines": [
         "_DEBUG",
         "UNICODE",
         "_UNICODE"
       ],
-      "compilerPath": "c:\\Users\\admin\\AppData\\Roaming\\Code\\User\\globalStorage\\sigbots.pros\\install\\pros-toolchain-windows\\usr\\bin\\arm-none-eabi-g++",
+      "compilerPath": "c:\\Users\\JimArnold\\AppData\\Roaming\\Antigravity\\User\\globalStorage\\sigbots.pros\\install\\pros-toolchain-windows\\usr\\bin\\arm-none-eabi-g++",
       "cStandard": "gnu11",
       "cppStandard": "gnu++20",
       "intelliSenseMode": "gcc-arm",
       "browse": {
         "path": [
-          "c:\\Users\\admin\\Documents\\Auton-Replayer-Lemlib"
+          "c:\\Users\\JimArnold\\Documents\\GitHub\\Auton-Replayer-Lemlib"
         ],
         "limitSymbolsToIncludedHeaders": true,
         "databaseFilename": ""

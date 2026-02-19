@@ -1,178 +1,182 @@
-#include "lemlib/api.hpp" // IWYU pragma: keep
-#include <string> // IWYU pragma: keep
-#include "pros/rtos.hpp"
 #include "main.h"
+#include "lemlib/api.hpp" // IWYU pragma: keep
+#include "pros/rtos.hpp"
 #include "robot_config.h"
-#include "autonomous.h" // IWYU pragma: keep
+#include <string> // IWYU pragma: keep
+
+
 #include "position_replay.h"
 #include "subsystems/intake.h"
 #include "subsystems/outtake.h"
 #include "subsystems/pneumatics.h"
 
 void initialize() {
-    initializeRobot();
-    
-    // Try to load any existing recording from SD card
-    if (positionReplay.loadFromSD()) {
-        pros::screen::set_pen(pros::c::COLOR_GREEN);
-        pros::screen::print(pros::E_TEXT_MEDIUM, 10, 100, "Position recording loaded!");
-    }
-    
-    drawReplayMenu();
+  initializeRobot();
+
+  // Try to load any existing recording from SD card
+  if (positionReplay.loadFromSD()) {
+    pros::screen::set_pen(pros::c::COLOR_GREEN);
+    pros::screen::print(pros::E_TEXT_MEDIUM, 10, 100,
+                        "Position recording loaded!");
+  }
+
+  drawReplayMenu();
 }
 
 void disabled() {
-    // Bug #3 fix: Safely stop recording/playback when robot is disabled
-    if (positionReplay.isRecording()) {
-        positionReplay.stopRecording(true);  // Save what we have
-    }
-    if (positionReplay.isPlaying()) {
-        positionReplay.abortPlayback();
-    }
+  // Bug #3 fix: Safely stop recording/playback when robot is disabled
+  if (positionReplay.isRecording()) {
+    positionReplay.stopRecording(true); // Save what we have
+  }
+  if (positionReplay.isPlaying()) {
+    positionReplay.abortPlayback();
+  }
 }
 
 void competition_initialize() {}
 
 void autonomous() {
-    // Play back the recorded position-based autonomous
-    positionReplay.playback();
+  // Play back the recorded position-based autonomous
+  positionReplay.playback();
 }
 
 // Small deadband to prevent drift (applies to values close to 0)
 int applyDeadband(int value, int threshold = 8) {
-    return (abs(value) < threshold) ? 0 : value;
+  return (abs(value) < threshold) ? 0 : value;
 }
 
 // Draw the main menu for recording/playback
 void drawReplayMenu() {
-    pros::screen::set_pen(pros::c::COLOR_BLACK);
-    pros::screen::fill_rect(0, 0, 480, 240);
-    
-    // Title
-    pros::screen::set_pen(pros::c::COLOR_WHITE);
-    pros::screen::print(pros::E_TEXT_LARGE, 100, 10, "POSITION RECORDER");
-    
-    // Draw buttons
-    // Record button (left side)
-    pros::screen::set_pen(pros::c::COLOR_RED);
-    pros::screen::fill_rect(20, 60, 220, 140);
-    pros::screen::set_pen(pros::c::COLOR_WHITE);
-    pros::screen::print(pros::E_TEXT_LARGE, 70, 90, "RECORD");
-    
-    // Playback button (right side)
-    pros::screen::set_pen(pros::c::COLOR_GREEN);
-    pros::screen::fill_rect(260, 60, 460, 140);
-    pros::screen::set_pen(pros::c::COLOR_WHITE);
-    pros::screen::print(pros::E_TEXT_LARGE, 320, 90, "PLAY");
-    
-    // Status area
-    pros::screen::set_pen(pros::c::COLOR_DARK_GRAY);
-    pros::screen::fill_rect(20, 160, 460, 220);
-    
-    // Show recording info
-    pros::screen::set_pen(pros::c::COLOR_WHITE);
-    if (positionReplay.getFrameCount() > 0) {
-        uint32_t duration = positionReplay.getDuration();
-        pros::screen::print(pros::E_TEXT_MEDIUM, 30, 175, 
-            "Recording: %d waypoints (%.1f sec)", 
-            positionReplay.getFrameCount(), 
-            duration / 1000.0f);
-    } else {
-        pros::screen::print(pros::E_TEXT_MEDIUM, 30, 175, "No recording loaded");
-    }
-    
-    // Instructions
-    pros::screen::set_pen(pros::c::COLOR_YELLOW);
-    pros::screen::print(pros::E_TEXT_SMALL, 30, 195, "Touch RECORD, drive, touch STOP when done");
+  pros::screen::set_pen(pros::c::COLOR_BLACK);
+  pros::screen::fill_rect(0, 0, 480, 240);
+
+  // Title
+  pros::screen::set_pen(pros::c::COLOR_WHITE);
+  pros::screen::print(pros::E_TEXT_LARGE, 100, 10, "POSITION RECORDER");
+
+  // Draw buttons
+  // Record button (left side)
+  pros::screen::set_pen(pros::c::COLOR_RED);
+  pros::screen::fill_rect(20, 60, 220, 140);
+  pros::screen::set_pen(pros::c::COLOR_WHITE);
+  pros::screen::print(pros::E_TEXT_LARGE, 70, 90, "RECORD");
+
+  // Playback button (right side)
+  pros::screen::set_pen(pros::c::COLOR_GREEN);
+  pros::screen::fill_rect(260, 60, 460, 140);
+  pros::screen::set_pen(pros::c::COLOR_WHITE);
+  pros::screen::print(pros::E_TEXT_LARGE, 320, 90, "PLAY");
+
+  // Status area
+  pros::screen::set_pen(pros::c::COLOR_DARK_GRAY);
+  pros::screen::fill_rect(20, 160, 460, 220);
+
+  // Show recording info
+  pros::screen::set_pen(pros::c::COLOR_WHITE);
+  if (positionReplay.getFrameCount() > 0) {
+    uint32_t duration = positionReplay.getDuration();
+    pros::screen::print(pros::E_TEXT_MEDIUM, 30, 175,
+                        "Recording: %d waypoints (%.1f sec)",
+                        positionReplay.getFrameCount(), duration / 1000.0f);
+  } else {
+    pros::screen::print(pros::E_TEXT_MEDIUM, 30, 175, "No recording loaded");
+  }
+
+  // Instructions
+  pros::screen::set_pen(pros::c::COLOR_YELLOW);
+  pros::screen::print(pros::E_TEXT_SMALL, 30, 195,
+                      "Touch RECORD, drive, touch STOP when done");
 }
 
 // Handle touch input for the menu
 void handleMenuTouch() {
-    pros::screen_touch_status_s_t status = pros::screen::touch_status();
-    
-    if (status.touch_status == pros::E_TOUCH_PRESSED) {
-        int x = status.x;
-        int y = status.y;
-        
-        // Check if in button area (y between 60 and 140)
-        if (y >= 60 && y <= 140) {
-            // Record button
-            if (x >= 20 && x <= 220) {
-                if (!positionReplay.isRecording()) {
-                    positionReplay.startRecording();
-                    
-                    // Change button to STOP
-                    pros::screen::set_pen(pros::c::COLOR_ORANGE);
-                    pros::screen::fill_rect(20, 60, 220, 140);
-                    pros::screen::set_pen(pros::c::COLOR_WHITE);
-                    pros::screen::print(pros::E_TEXT_LARGE, 80, 90, "STOP");
-                } else {
-                    positionReplay.stopRecording(true);  // Save to SD
-                    drawReplayMenu();  // Redraw menu
-                }
-            }
-            // Play button
-            else if (x >= 260 && x <= 460 && !positionReplay.isRecording()) {
-                positionReplay.playback();
-                drawReplayMenu();  // Redraw after playback
-            }
+  pros::screen_touch_status_s_t status = pros::screen::touch_status();
+
+  if (status.touch_status == pros::E_TOUCH_PRESSED) {
+    int x = status.x;
+    int y = status.y;
+
+    // Check if in button area (y between 60 and 140)
+    if (y >= 60 && y <= 140) {
+      // Record button
+      if (x >= 20 && x <= 220) {
+        if (!positionReplay.isRecording()) {
+          positionReplay.startRecording();
+
+          // Change button to STOP
+          pros::screen::set_pen(pros::c::COLOR_ORANGE);
+          pros::screen::fill_rect(20, 60, 220, 140);
+          pros::screen::set_pen(pros::c::COLOR_WHITE);
+          pros::screen::print(pros::E_TEXT_LARGE, 80, 90, "STOP");
+        } else {
+          positionReplay.stopRecording(true); // Save to SD
+          drawReplayMenu();                   // Redraw menu
         }
-        
-        pros::delay(200);  // Debounce
+      }
+      // Play button
+      else if (x >= 260 && x <= 460 && !positionReplay.isRecording()) {
+        positionReplay.playback();
+        drawReplayMenu(); // Redraw after playback
+      }
     }
+
+    pros::delay(200); // Debounce
+  }
 }
 
 void opcontrol() {
-    IntakeControl intake;
-    OuttakeControl outtake;
-    PneumaticControl pneumatics;
+  IntakeControl intake;
+  OuttakeControl outtake;
+  PneumaticControl pneumatics;
 
-    while (true) {
-        // Handle menu touch
-        handleMenuTouch();
-        
-        // Tank Drive with deadband
-        int left = applyDeadband(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
-        int right = applyDeadband(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y));
-        left_motors.move(left);
-        right_motors.move(right);
+  while (true) {
+    // Handle menu touch
+    handleMenuTouch();
 
-        // Update subsystems
-        outtake.update();
-        intake.update(outtake.isMidScoring());
-        pneumatics.update();
-        
-        // Record frame if recording is active
-        positionReplay.recordFrame();
-        
-        // Controller shortcut: UP to start recording, DOWN to stop
-        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
-            if (!positionReplay.isRecording()) {
-                positionReplay.startRecording();
-                
-                // Update screen
-                pros::screen::set_pen(pros::c::COLOR_ORANGE);
-                pros::screen::fill_rect(20, 60, 220, 140);
-                pros::screen::set_pen(pros::c::COLOR_WHITE);
-                pros::screen::print(pros::E_TEXT_LARGE, 80, 90, "STOP");
-            }
-        }
-        
-        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-            if (positionReplay.isRecording()) {
-                positionReplay.stopRecording(true);
-                drawReplayMenu();
-            }
-        }
-        
-        // LEFT button to test playback
-        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-            if (!positionReplay.isRecording() && !positionReplay.isPlaying()) {
-                positionReplay.playback();
-                drawReplayMenu();
-            }
-        }
+    // Tank Drive with deadband
+    int left =
+        applyDeadband(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
+    int right =
+        applyDeadband(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y));
+    left_motors.move(left);
+    right_motors.move(right);
 
-        pros::delay(20);
+    // Update subsystems
+    outtake.update();
+    intake.update(outtake.isMidScoring());
+    pneumatics.update();
+
+    // Record frame if recording is active
+    positionReplay.recordFrame();
+
+    // Controller shortcut: UP to start recording, DOWN to stop
+    if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
+      if (!positionReplay.isRecording()) {
+        positionReplay.startRecording();
+
+        // Update screen
+        pros::screen::set_pen(pros::c::COLOR_ORANGE);
+        pros::screen::fill_rect(20, 60, 220, 140);
+        pros::screen::set_pen(pros::c::COLOR_WHITE);
+        pros::screen::print(pros::E_TEXT_LARGE, 80, 90, "STOP");
+      }
     }
+
+    if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+      if (positionReplay.isRecording()) {
+        positionReplay.stopRecording(true);
+        drawReplayMenu();
+      }
+    }
+
+    // LEFT button to test playback
+    if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+      if (!positionReplay.isRecording() && !positionReplay.isPlaying()) {
+        positionReplay.playback();
+        drawReplayMenu();
+      }
+    }
+
+    pros::delay(20);
+  }
 }

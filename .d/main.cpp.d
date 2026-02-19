@@ -37,16 +37,16 @@ bin/main.cpp.o: src/main.cpp include/lemlib/api.hpp \
  include/liblvgl/core/../draw/../misc/../font/../draw/lv_draw_buf.h \
  include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_types.h \
  include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_area.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h \
+ include/liblvgl/core/../draw/../misc/../font/../draw/../misc/../lv_conf_internal.h \
  include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_types.h \
  include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_math.h \
  include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_color.h \
  include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_assert.h \
  include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_log.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/stdlib/lv_mem.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/stdlib/lv_string.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_types.h \
+ include/liblvgl/core/../draw/../misc/../font/../draw/../misc/../stdlib/lv_mem.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h \
+ include/liblvgl/core/../draw/../misc/../font/../draw/../misc/../stdlib/lv_string.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_types.h \
  include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_palette.h \
  include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_color.h \
  include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_color_op.h \
@@ -56,15 +56,15 @@ bin/main.cpp.o: src/main.cpp include/lemlib/api.hpp \
  include/liblvgl/core/../draw/../misc/../font/../misc/lv_area.h \
  include/liblvgl/core/../draw/../misc/../font/../misc/cache/lv_cache.h \
  include/liblvgl/core/../draw/../misc/../font/../misc/cache/lv_cache_entry.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/osal/lv_os.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_types.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/osal/lv_os_none.h \
+ include/liblvgl/core/../draw/../misc/../font/../misc/cache/../../osal/lv_os.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_types.h \
+ include/liblvgl/core/../draw/../misc/../font/../misc/cache/../../osal/lv_os_none.h \
  include/liblvgl/core/../draw/../misc/../font/../misc/cache/../lv_types.h \
  include/liblvgl/core/../draw/../misc/../font/../misc/cache/lv_cache_private.h \
  include/liblvgl/core/../draw/../misc/../font/../misc/cache/lv_cache_lru_rb.h \
  include/liblvgl/core/../draw/../misc/../font/../misc/cache/lv_image_cache.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h \
+ include/liblvgl/core/../draw/../misc/../font/../misc/cache/../../lv_conf_internal.h \
  include/liblvgl/core/../draw/../misc/../font/../misc/cache/lv_image_header_cache.h \
  include/liblvgl/core/../draw/../misc/lv_color.h \
  include/liblvgl/core/../draw/../misc/lv_area.h \
@@ -157,39 +157,41 @@ bin/main.cpp.o: src/main.cpp include/lemlib/api.hpp \
  include/liblvgl/core/../others/sysmon/lv_sysmon.h \
  include/liblvgl/core/../others/sysmon/../../misc/lv_timer.h \
  include/liblvgl/core/../others/sysmon/../../others/observer/lv_observer.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_types.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_style.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_area.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_color.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_assert.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_tree.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_anim.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/display/lv_display.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_pos.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_scroll.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_style.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_bidi.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_style_gen.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_style.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_draw.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_rect.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_label.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_image.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_line.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_arc.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_class.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_property.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_event.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_event.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/indev/lv_indev.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_group.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_ll.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_area.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_timer.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_event.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_group.h \
+ include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_types.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_style.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_area.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_color.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_assert.h \
+ include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj_tree.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_anim.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/display/lv_display.h \
+ include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj_pos.h \
+ include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj_scroll.h \
+ include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj_style.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_bidi.h \
+ include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj_style_gen.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_style.h \
+ include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj_draw.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_rect.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_label.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_image.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_line.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_arc.h \
+ include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj_class.h \
+ include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj_property.h \
+ include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj_event.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_event.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/indev/lv_indev.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/core/lv_group.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_types.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_ll.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_area.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_timer.h \
+ C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_event.h \
+ include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_group.h \
  include/liblvgl/core/../stdlib/builtin/lv_tlsf.h \
  include/liblvgl/core/../stdlib/builtin/../../lv_conf_internal.h \
  include/liblvgl/core/../stdlib/builtin/../../osal/lv_os.h \
@@ -260,12 +262,12 @@ bin/main.cpp.o: src/main.cpp include/lemlib/api.hpp \
  include/liblvgl/libs/qrcode/lv_qrcode_private.h \
  include/liblvgl/libs/qrcode/../../widgets/canvas/lv_canvas_private.h \
  include/liblvgl/libs/qrcode/../../widgets/canvas/../image/lv_image_private.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_private.h \
+ include/liblvgl/libs/qrcode/../../widgets/canvas/../image/../../core/lv_obj_private.h \
  include/liblvgl/libs/qrcode/../../widgets/canvas/../image/lv_image.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_fs.h \
- C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw.h \
+ include/liblvgl/libs/qrcode/../../widgets/canvas/../image/../../lv_conf_internal.h \
+ include/liblvgl/libs/qrcode/../../widgets/canvas/../image/../../core/lv_obj.h \
+ include/liblvgl/libs/qrcode/../../widgets/canvas/../image/../../misc/lv_fs.h \
+ include/liblvgl/libs/qrcode/../../widgets/canvas/../image/../../draw/lv_draw.h \
  include/liblvgl/libs/qrcode/../../widgets/canvas/lv_canvas.h \
  include/liblvgl/libs/qrcode/../../widgets/canvas/../../lv_conf_internal.h \
  include/liblvgl/libs/qrcode/../../widgets/canvas/../image/lv_image.h \
@@ -748,16 +750,16 @@ include/liblvgl/core/../draw/../misc/../font/lv_symbol_def.h:
 include/liblvgl/core/../draw/../misc/../font/../draw/lv_draw_buf.h:
 include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_types.h:
 include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_area.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h:
+include/liblvgl/core/../draw/../misc/../font/../draw/../misc/../lv_conf_internal.h:
 include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_types.h:
 include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_math.h:
 include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_color.h:
 include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_assert.h:
 include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_log.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/stdlib/lv_mem.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/stdlib/lv_string.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_types.h:
+include/liblvgl/core/../draw/../misc/../font/../draw/../misc/../stdlib/lv_mem.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h:
+include/liblvgl/core/../draw/../misc/../font/../draw/../misc/../stdlib/lv_string.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_types.h:
 include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_palette.h:
 include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_color.h:
 include/liblvgl/core/../draw/../misc/../font/../draw/../misc/lv_color_op.h:
@@ -767,15 +769,15 @@ include/liblvgl/core/../draw/../misc/../font/../draw/../lv_conf_internal.h:
 include/liblvgl/core/../draw/../misc/../font/../misc/lv_area.h:
 include/liblvgl/core/../draw/../misc/../font/../misc/cache/lv_cache.h:
 include/liblvgl/core/../draw/../misc/../font/../misc/cache/lv_cache_entry.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/osal/lv_os.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_types.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/osal/lv_os_none.h:
+include/liblvgl/core/../draw/../misc/../font/../misc/cache/../../osal/lv_os.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_types.h:
+include/liblvgl/core/../draw/../misc/../font/../misc/cache/../../osal/lv_os_none.h:
 include/liblvgl/core/../draw/../misc/../font/../misc/cache/../lv_types.h:
 include/liblvgl/core/../draw/../misc/../font/../misc/cache/lv_cache_private.h:
 include/liblvgl/core/../draw/../misc/../font/../misc/cache/lv_cache_lru_rb.h:
 include/liblvgl/core/../draw/../misc/../font/../misc/cache/lv_image_cache.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h:
+include/liblvgl/core/../draw/../misc/../font/../misc/cache/../../lv_conf_internal.h:
 include/liblvgl/core/../draw/../misc/../font/../misc/cache/lv_image_header_cache.h:
 include/liblvgl/core/../draw/../misc/lv_color.h:
 include/liblvgl/core/../draw/../misc/lv_area.h:
@@ -868,39 +870,41 @@ include/liblvgl/core/../osal/lv_os.h:
 include/liblvgl/core/../others/sysmon/lv_sysmon.h:
 include/liblvgl/core/../others/sysmon/../../misc/lv_timer.h:
 include/liblvgl/core/../others/sysmon/../../others/observer/lv_observer.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_types.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_style.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_area.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_color.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_assert.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_tree.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_anim.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/display/lv_display.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_pos.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_scroll.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_style.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_bidi.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_style_gen.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_style.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_draw.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_rect.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_label.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_image.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_line.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_arc.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_class.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_property.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_event.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_event.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/indev/lv_indev.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_group.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_ll.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_area.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_timer.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_event.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_group.h:
+include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_types.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_style.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_area.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_color.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_assert.h:
+include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj_tree.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_anim.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/display/lv_display.h:
+include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj_pos.h:
+include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj_scroll.h:
+include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj_style.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_bidi.h:
+include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj_style_gen.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_style.h:
+include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj_draw.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_rect.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_label.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_image.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_line.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw_arc.h:
+include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj_class.h:
+include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj_property.h:
+include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_obj_event.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_event.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/indev/lv_indev.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/core/lv_group.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_types.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_ll.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_area.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_timer.h:
+C:/Users/JimArnold/Documents/GitHub/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_event.h:
+include/liblvgl/core/../others/sysmon/../../others/observer/../../core/lv_group.h:
 include/liblvgl/core/../stdlib/builtin/lv_tlsf.h:
 include/liblvgl/core/../stdlib/builtin/../../lv_conf_internal.h:
 include/liblvgl/core/../stdlib/builtin/../../osal/lv_os.h:
@@ -974,12 +978,12 @@ include/liblvgl/others/observer/lv_observer.h:
 include/liblvgl/libs/qrcode/lv_qrcode_private.h:
 include/liblvgl/libs/qrcode/../../widgets/canvas/lv_canvas_private.h:
 include/liblvgl/libs/qrcode/../../widgets/canvas/../image/lv_image_private.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj_private.h:
+include/liblvgl/libs/qrcode/../../widgets/canvas/../image/../../core/lv_obj_private.h:
 include/liblvgl/libs/qrcode/../../widgets/canvas/../image/lv_image.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/lv_conf_internal.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/core/lv_obj.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/misc/lv_fs.h:
-C:/Users/admin/Documents/Auton-Replayer-Lemlib/include/liblvgl/draw/lv_draw.h:
+include/liblvgl/libs/qrcode/../../widgets/canvas/../image/../../lv_conf_internal.h:
+include/liblvgl/libs/qrcode/../../widgets/canvas/../image/../../core/lv_obj.h:
+include/liblvgl/libs/qrcode/../../widgets/canvas/../image/../../misc/lv_fs.h:
+include/liblvgl/libs/qrcode/../../widgets/canvas/../image/../../draw/lv_draw.h:
 include/liblvgl/libs/qrcode/../../widgets/canvas/lv_canvas.h:
 include/liblvgl/libs/qrcode/../../widgets/canvas/../../lv_conf_internal.h:
 include/liblvgl/libs/qrcode/../../widgets/canvas/../image/lv_image.h:

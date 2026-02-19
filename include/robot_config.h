@@ -1,6 +1,7 @@
 #pragma once
-#include "main.h" // IWYU pragma: keep
 #include "lemlib/api.hpp" // IWYU pragma: keep
+#include "main.h"         // IWYU pragma: keep
+
 
 // Motor ports
 constexpr int INTAKE_PORT = 21;
@@ -28,15 +29,3 @@ extern pros::Controller master;
 
 // Initialization function
 void initializeRobot();
-
-// --------------------- Autonomous Selector ---------------------
-extern int autonSelection;
-extern const char* autonNames[];
-extern bool selectorLocked;
-extern uint32_t lockTimer;
-
-void drawAutonSelector();
-void drawLockScreen();
-void handleScreenTouch();
-void runAutonSelector(uint32_t timeout_ms);
-void checkAndLockSelector(uint32_t lockDelay);

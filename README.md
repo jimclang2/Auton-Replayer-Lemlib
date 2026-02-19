@@ -14,10 +14,10 @@ The playback uses a **PD controller** (Proportional + Derivative) for smooth pat
 
 ```cpp
 // Match these to your LemLib lateral/angular PID settings
-float kP_forward = 4.25f;   // Lateral kP
-float kD_forward = 1.0f;    // Lateral kD
-float kP_turn = 0.863f;     // Angular kP
-float kD_turn = 0.235f;     // Angular kD
+float kP_forward = 5.0f;    // Lateral kP
+float kD_forward = 8.0f;    // Lateral kD
+float kP_turn = 1.7f;       // Angular kP
+float kD_turn = 14.0f;      // Angular kD
 ```
 
 💡 **Tip:** Use the same values from your LemLib `lateral_controller` and `angular_controller` for consistent behavior.
@@ -46,7 +46,7 @@ float kD_turn = 0.235f;     // Angular kD
 | **Controller** | `LEFT` |
 
 ### Emergency Stop
-Press `LEFT + RIGHT` arrows simultaneously during playback.
+Press `UP + DOWN` arrows simultaneously during playback.
 
 ---
 
@@ -70,7 +70,7 @@ Press `LEFT + RIGHT` arrows simultaneously during playback.
 | `UP` | Start recording |
 | `DOWN` | Stop recording (auto-saves) |
 | `LEFT` | Test playback |
-| `LEFT + RIGHT` | Emergency stop |
+| `UP + DOWN` | Emergency stop |
 
 ---
 
